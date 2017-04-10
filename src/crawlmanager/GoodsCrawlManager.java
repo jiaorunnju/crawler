@@ -2,45 +2,51 @@ package crawlmanager;
 
 import java.util.ArrayList;
 
-import crawl.TaobaoCrawler;
-import datautil.DataStorage;
-import datautil.GoodsInfo;
+import crawl.AbstractCrawler;
+import crawl.DDCrawler;
+import crawl.JDCrawler;
 
 public class GoodsCrawlManager implements AbstractManager{
 	
 	private ArrayList<String> urls = new ArrayList<>();
-	private int MAXNUMBER;
+	private int MAXNUMBER = 30;
 	private int index = 0;
-	private DataStorage d;
+	private String keyword;
 	
-	public GoodsCrawlManager(int MaxNumber,String starturl) {
+	public GoodsCrawlManager(int MaxNumber,String keywords) {
 		this.MAXNUMBER = MaxNumber;
-		this.urls.add(starturl);
-		d = DataStorage.getInstance();
+		keyword = keywords;
+	}
+	
+	public GoodsCrawlManager(String keywords) {
+		this.MAXNUMBER = 30;
+		keyword = keywords;
+	}
+	
+	public GoodsCrawlManager(){
+		keyword = "";
 	}
 
 	@Override
 	public void start() {
+		if(keyword.equals("")){
+			System.err.println("No keywords specified!");
+			return;
+		}
+		AbstractCrawler ac = new JDCrawler();
+		urls.add(ac.getInitialUrl(keyword));
+		for(int i=1;i<MAXNUMBER;++i){
+			urls.add(ac.getUrl(keyword, i));
+		}
 		while(index < urls.size()){
 			index++;
-			new TaobaoCrawler(this).crawl(urls.get(index-1));
+			ac.crawl(urls.get(index-1));
 		}
 	}
 
 	@Override
-	public synchronized void update(ArrayList<String> arr) {
-		if(this.MAXNUMBER - arr.size() > 0){
-			this.urls.addAll(arr);
-			this.MAXNUMBER -= arr.size();
-		}
-		
-	}
-
-	@Override
-	public void store(ArrayList<GoodsInfo> arr) {
-		for (GoodsInfo goodsInfo : arr) {
-			this.d.store(goodsInfo);
-		}
+	public void setKeyword(String keyword) {
+		this.keyword = keyword;
 	}
 
 }

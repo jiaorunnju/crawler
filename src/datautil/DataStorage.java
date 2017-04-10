@@ -6,7 +6,7 @@ public class DataStorage {
 	
 	private static DataStorage d = null;
 	private ArrayList<GoodsInfo> buffer = new ArrayList<>();
-	private final int BUFFERSIZE = 500;
+	private final int BUFFERSIZE = 1000;
 	
 	public static DataStorage getInstance(){
 		if(d == null){
