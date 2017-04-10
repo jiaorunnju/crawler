@@ -1,8 +1,12 @@
 package datautil;
 
+import java.util.ArrayList;
+
 public class DataStorage {
 	
 	private static DataStorage d = null;
+	private ArrayList<GoodsInfo> buffer = new ArrayList<>();
+	private final int BUFFERSIZE = 500;
 	
 	public static DataStorage getInstance(){
 		if(d == null){
@@ -12,6 +16,17 @@ public class DataStorage {
 	}
 	
 	public synchronized void store(GoodsInfo good){
+		if(buffer.size() >= BUFFERSIZE){
+			submit();
+			buffer.clear();
+		}
+		
+		if(good != null){
+			buffer.add(good);
+		}
+	}
+	
+	private void submit(){
 		
 	}
 }

@@ -5,9 +5,14 @@ public class GoodsInfo {
 	private String url;
 	private double price;
 	private String seller;
+	private String des;
 	
 	public String getName() {
 		return name;
+	}
+	
+	public String getDes() {
+		return des;
 	}
 
 	public String getUrl() {
@@ -22,10 +27,11 @@ public class GoodsInfo {
 		return seller;
 	}
 
-	public GoodsInfo(String name,String url,double price,String seller){
+	public GoodsInfo(String name,String url,double price,String seller,String des){
 		this.name = name;
 		this.url = url;
 		this.price = price;
 		this.seller = seller;
+		this.des = des;
 	}
 }

@@ -23,7 +23,7 @@ public class GoodsCrawlManager implements AbstractManager{
 	public void start() {
 		while(index < urls.size()){
 			index++;
-			new TaobaoCrawler(this).crawl(urls.get(index));
+			new TaobaoCrawler(this).crawl(urls.get(index-1));
 		}
 	}
 

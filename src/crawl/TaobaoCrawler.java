@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import crawlmanager.AbstractManager;
 import datautil.GoodsInfo;
+import java.util.Date;
 
 public class TaobaoCrawler implements AbstractCrawler{
 	
@@ -20,9 +21,17 @@ public class TaobaoCrawler implements AbstractCrawler{
 	public void crawl(String url){
 		ArrayList<String> arr = new ArrayList<>();
 		ArrayList<GoodsInfo> data = new ArrayList<>();
-		//具体的爬取过程
+		
+		System.out.println("Crawling "+url);
+		arr.add(url+new Date().toString());
 		
 		manager.store(data);
 		notify(arr);
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
