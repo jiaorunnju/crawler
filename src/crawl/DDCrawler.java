@@ -34,7 +34,7 @@ public class DDCrawler implements AbstractCrawler{
                     Elements title = li.select("p[class=name]>a");
                     String productName = title.attr("title");
                     if(productName != null && productPrice != null)
-                    	System.out.println(productName+"\t"+productPrice);
+                    	System.out.println(productName.trim()+"\t"+productPrice.trim());
                 }
             }
 		} catch (IOException e) {
