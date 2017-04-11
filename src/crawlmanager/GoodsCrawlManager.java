@@ -7,7 +7,7 @@ import crawl.*;
 public class GoodsCrawlManager implements AbstractManager{
 	
 	private ArrayList<String> urls = new ArrayList<>();
-	private int MAXNUMBER = 30;
+	private int MAXNUMBER = 30;	//页码
 	private int index = 0;
 	private String keyword;
 	private AbstractCrawler a;
