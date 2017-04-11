@@ -15,15 +15,18 @@ public class DataStorage {
 		return d;
 	}
 	
-	public synchronized void store(GoodsInfo good){
-		if(buffer.size() >= BUFFERSIZE){
-			submit();
-			buffer.clear();
-		}
+	public void store(GoodsInfo good){
 		
-		if(good != null){
-			buffer.add(good);
-		}
+		synchronized(DataStorage.class){
+			if(buffer.size() >= BUFFERSIZE){
+				submit();
+				buffer.clear();
+			}
+			
+			if(good != null){
+				buffer.add(good);
+			}
+		}	
 	}
 	
 	private void submit(){
