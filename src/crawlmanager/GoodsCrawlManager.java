@@ -2,9 +2,7 @@ package crawlmanager;
 
 import java.util.ArrayList;
 
-import crawl.AbstractCrawler;
-import crawl.DDCrawler;
-import crawl.JDCrawler;
+import crawl.*;
 
 public class GoodsCrawlManager implements AbstractManager{
 	
@@ -12,35 +10,27 @@ public class GoodsCrawlManager implements AbstractManager{
 	private int MAXNUMBER = 30;
 	private int index = 0;
 	private String keyword;
+	private AbstractCrawler a;
 	
-	public GoodsCrawlManager(int MaxNumber,String keywords) {
+	public GoodsCrawlManager(int MaxNumber,String keywords,AbstractCrawler a) {
 		this.MAXNUMBER = MaxNumber;
-		keyword = keywords;
-	}
-	
-	public GoodsCrawlManager(String keywords) {
-		this.MAXNUMBER = 30;
-		keyword = keywords;
-	}
-	
-	public GoodsCrawlManager(){
-		keyword = "";
+		this.keyword = keywords;
+		this.a = a;
 	}
 
 	@Override
 	public void start() {
-		if(keyword.equals("")){
+		if(keyword.equals("") || a == null){
 			System.err.println("No keywords specified!");
 			return;
 		}
-		AbstractCrawler ac = new JDCrawler();
-		urls.add(ac.getInitialUrl(keyword));
+		urls.add(a.getInitialUrl(keyword));
 		for(int i=1;i<MAXNUMBER;++i){
-			urls.add(ac.getUrl(keyword, i));
+			urls.add(a.getUrl(keyword, i));
 		}
 		while(index < urls.size()){
 			index++;
-			ac.crawl(urls.get(index-1));
+			a.crawl(urls.get(index-1));
 		}
 	}
 
