@@ -14,6 +14,7 @@ import org.jsoup.select.Elements;
 
 public class DDCrawler implements AbstractCrawler{
 	private DataStorage d = DataStorage.getInstance();
+	private static final String seller = "当当";
 	
 	public void crawl(String url){
 		ArrayList<GoodsInfo> data = new ArrayList<>();
@@ -30,11 +31,22 @@ public class DDCrawler implements AbstractCrawler{
                 while(liIter.hasNext()){
                     Element li = liIter.next();
                     Elements price = li.select("p[class=price]>span");
-                    String productPrice = price.html().replaceAll("&yen;", "");
+                    String productPrice = price.html().replaceAll("&yen;", "").trim();
                     Elements title = li.select("p[class=name]>a");
-                    String productName = title.attr("title");
-                    if(productName != null && productPrice != null)
-                    	System.out.println(productName.trim()+"\t"+productPrice.trim());
+                    String productName = title.attr("title").replaceAll("】", "").
+                    		replaceAll("【", "").trim();
+                    String producturl = title.attr("href").trim();
+                    if((productName != null && productPrice != null)&&
+                    		(productName != "" && productPrice != "")){
+                    	try{
+                    		double p = Double.parseDouble(productPrice);
+                    		data.add(new GoodsInfo(producturl, p
+                        			, DDCrawler.seller, productName.substring(0, 
+                        					(productName.length()>40)?40:productName.length()-1)));
+                    	}catch(Exception e){
+                    		continue;
+                    	}
+                    }
                 }
             }
 		} catch (IOException e) {

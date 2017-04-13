@@ -13,7 +13,8 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class JDCrawler implements AbstractCrawler{
-private DataStorage d = DataStorage.getInstance();
+	private DataStorage d = DataStorage.getInstance();
+	private static final String seller = "京东";
 	
 	public void crawl(String url){
 		ArrayList<GoodsInfo> data = new ArrayList<>();
@@ -31,11 +32,22 @@ private DataStorage d = DataStorage.getInstance();
                     Element li = liIter.next();  
                     Element div = li.select("div[class=gl-i-wrap]").first();  
                     Elements title = div.select("div[class=p-name p-name-type-2]>a");  
-                    String productName = title.attr("title");  
-                    Elements price = div.select(".p-price>strong");  
+                    String productName = title.attr("title").replaceAll("】", "").
+                    		replaceAll("【", "").trim();
+                    String productUrl = title.attr("href");
+                    Elements price = div.select(".p-price>strong"); 
                     String productPrice =price.attr("data-price");
-                    if(productName != null && productPrice != null)
-                    	System.out.println(productName+"\t"+productPrice);
+                    if((productName != null && productPrice != null)&&
+                    		(productName != "" && productPrice != "")){
+                    	try{
+                    		double p = Double.parseDouble(productPrice);
+                    	data.add(new GoodsInfo("https:"+productUrl, p, 
+                    			JDCrawler.seller, productName.substring(0, 
+                    					(productName.length()>40)?40:productName.length()-1)));
+                    	}catch(Exception e){
+                    		continue;
+                    	}
+                    }
                 }  
             }
 		} catch (IOException e) {

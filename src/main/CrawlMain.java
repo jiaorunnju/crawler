@@ -11,9 +11,10 @@ import crawl.DDCrawler;
 import crawl.JDCrawler;
 import crawlmanager.AbstractManager;
 import crawlmanager.GoodsCrawlManager;
+import datautil.DataStorage;
 
 public class CrawlMain {
-	static int MAX = 1;
+	static int MAX = 30;
 	public static void main(String[] args) {
 		if(args.length > 2){
 			System.out.println("Usage:\tcrawl FILENAME "
@@ -51,5 +52,7 @@ public class CrawlMain {
 			ac.setKeyword(str);
 			ac.start();
 		}
+		
+		DataStorage.getInstance().sync();
 	}
 }
